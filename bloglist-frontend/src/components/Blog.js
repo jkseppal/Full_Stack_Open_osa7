@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
+import { deleteBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
 const Blog = ({ blog, addLike }) => {
+  const dispatch = useDispatch()
   const [fullView, setFullView] = useState(false)
-  //const [blogi, setBlogi] = useState(null)
 
   const deleteButton = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -36,22 +37,36 @@ const Blog = ({ blog, addLike }) => {
       likes: (blog.likes + 1),
       id: blog.id
     }
-    //await setBlogi(likedBlog)
     addLike(likedBlog)
-    //setBlogi(null)
-    //await blogService.update(likedBlog.id, likedBlog)
-    //await window.location.reload()
-    //(false)
   }
 
-  const handleDelete = async (event) => {
+  /*const handleLike = async (event) => {
+    event.preventDefault()
+    const likedBlog = {
+      url: blog.url,
+      title: blog.title,
+      author: blog.author,
+      user: blog.user,
+      likes: (blog.likes + 1),
+      id: blog.id
+    }
+    dispatch(giveLike(likedBlog))
+  }*/
+
+  /*const handleDelete = async (event) => {
     event.preventDefault()
     if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
       blogService.removal(blog.id)
       window.location.reload()
     }
-    //window.location.reload()
-    //(false)
+  }*/
+
+  const handleDelete = async (event) => {
+    event.preventDefault()
+    if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
+      dispatch(deleteBlog(blog.id))
+      window.location.reload()
+    }
   }
 
   if (fullView === false) {
@@ -71,66 +86,5 @@ const Blog = ({ blog, addLike }) => {
     </div>
   )
 }
-
-/*const BlogForm = ({ createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
-
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value)
-  }
-
-  const handleAuthorChange = (event) => {
-    setAuthor(event.target.value)
-  }
-
-  const handleUrlChange = (event) => {
-    setUrl(event.target.value)
-  }
-
-  const addBlog = (event) => {
-    event.preventDefault()
-    createBlog({
-      title: title,
-      author: author,
-      url: url
-    })
-
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-  }
-
-  return (
-    <div>
-      <h2>create new</h2>
-      <form onSubmit={addBlog}>
-        <div>
-          title:
-          <input
-            value={title}
-            onChange={handleTitleChange}
-          />
-        </div>
-        <div>
-          author:
-          <input
-            value={author}
-            onChange={handleAuthorChange}
-          />
-        </div>
-        <div>
-          url:
-          <input
-            value={url}
-            onChange={handleUrlChange}
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
-    </div>
-  )
-}*/
 
 export default Blog

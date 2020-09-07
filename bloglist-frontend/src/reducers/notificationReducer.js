@@ -9,24 +9,6 @@ const notificationReducer = (state = '', action) => {
   }
 }
 
-/*export const notificationChange = (notification, timer) => {
-  console.log('notification: ', notification)
-  console.log('timer in ms: ', timer * 1000)
-  return async dispatch => {
-    dispatch({
-      type: 'SET_NOTIFICATION',
-      notification,
-    })
-    setTimeout(() => {
-
-      dispatch({
-        type: 'SET_NOTIFICATION',
-        notification: ''
-      })
-    }, timer * 1000)
-  }
-}*/
-
 export const notificationChange = (notification, timer) => {
   console.log('notification: ', notification)
   console.log('timer in ms: ', timer * 1000)

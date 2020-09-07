@@ -5,24 +5,23 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { notificationChange } from './reducers/notificationReducer'
+import { initializeBlogs, giveLike, createBlog } from './reducers/blogReducer'
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const [blogs, setBlogs] = useState([])
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  },[dispatch])
+
+  const blogs = useSelector(state => state.blogs)
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
-  //const [alertMessage, setAlertMessage] = useState(null)
-
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -63,27 +62,29 @@ const App = () => {
     return false
   }
 
-  const addBlog = (blogOject) => {
+  /*const addBlog = (blogOject) => {
     blogFormRef.current.toggleVisibility()
     blogService
       .create(blogOject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
-        /*setAlertMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
-        setTimeout(() => {
-          setAlertMessage(null)
-        }, 5000)*/
         dispatch(notificationChange(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5))
       })
+  }*/
+
+  const addBlog = (blogOject) => {
+    blogFormRef.current.toggleVisibility()
+    dispatch(createBlog(blogOject))
+    dispatch(notificationChange(`a new blog ${blogOject.title} by ${blogOject.author} added`, 5))
   }
 
-  const updateBlog = (blogObject) => {
+  /*const updateBlog = (blogObject) => {
     blogService
       .update(blogObject.id, blogObject)
       .then(setBlogs(previousBlogs => previousBlogs.map(blog => blog.id === blogObject.id ? blogObject : blog)))
   }
 
-  /*const addLike = (id) => {
+  const addLike = (id) => {
     const blog = blogs.find((b) => b.id === id)
     const likedBlog = { ...blog, likes: ++blog.likes }
     blogService
@@ -92,6 +93,10 @@ const App = () => {
         setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
       })
   }*/
+
+  const updateBlog = (blogObject) => {
+    dispatch(giveLike(blogObject.id, blogObject, blogObject.likes))
+  }
 
   const blogFormRef = useRef()
 
@@ -141,7 +146,6 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {/*<Notification message={alertMessage} />*/}
       <Notification />
 
       <p>
@@ -171,16 +175,5 @@ const Error = ({ message }) => {
     </div>
   )
 }
-
-/*const Notification = ({ message }) => {
-  if (message === null) {
-    return null
-  }
-  return (
-    <div className="alert">
-      {message}
-    </div>
-  )
-}*/
 
 export default App
