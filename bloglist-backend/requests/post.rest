@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkphbmkiLCJpZCI6IjVmMzI5MDhmNjAxYTg3M2ZmMDExN2YxOSIsImlhdCI6MTU5NzE0OTQ0NX0.Y3fm6uxlahXhUVj37TWy2rkWA70DBCLc2fnGqTJyijc
+
+{
+    "url": "http://jokumuuuu.com",
+    "title": "Poistetaan",
+    "author": "Veijari",
+    "likes": 15
+}
