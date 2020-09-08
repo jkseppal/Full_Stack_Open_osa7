@@ -28,6 +28,17 @@ usersRouter.get('/', async (request, response) => {
   response.json(users.map(user => user.toJSON()))
 })
 
+usersRouter.get('/:id', (request, response) => {
+  User.findById(request.params.id)
+    .then(person => {
+      if (person) {
+        response.json(person)
+      } else {
+        response.status(404).end()
+      }
+    })
+})
+
 /*const user = new User({
     username: 'Testinimi',
     name: 'Testaajainen',
