@@ -40,27 +40,6 @@ const Blog = ({ blog, addLike }) => {
     addLike(likedBlog)
   }
 
-  /*const handleLike = async (event) => {
-    event.preventDefault()
-    const likedBlog = {
-      url: blog.url,
-      title: blog.title,
-      author: blog.author,
-      user: blog.user,
-      likes: (blog.likes + 1),
-      id: blog.id
-    }
-    dispatch(giveLike(likedBlog))
-  }*/
-
-  /*const handleDelete = async (event) => {
-    event.preventDefault()
-    if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {
-      blogService.removal(blog.id)
-      window.location.reload()
-    }
-  }*/
-
   const handleDelete = async (event) => {
     event.preventDefault()
     if (window.confirm(`remove blog ${blog.title} by ${blog.author}`)) {

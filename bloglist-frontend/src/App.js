@@ -3,25 +3,34 @@ import Blog from './components/Blog'
 import BlogForm from './components/BlogForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { useDispatch, useSelector } from 'react-redux'
 import { notificationChange } from './reducers/notificationReducer'
 import { initializeBlogs, giveLike, createBlog } from './reducers/blogReducer'
+import { initializeUsers } from './reducers/usersReducer'
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
 
 const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+    dispatch(initializeUsers())
+  },[dispatch])
+
+  useEffect(() => {
     dispatch(initializeBlogs())
   },[dispatch])
 
-  const blogs = useSelector(state => state.blogs)
+  let blogs = useSelector(state => state.blogs)
+  let users = useSelector(state => state.users)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  //const [users, setUsers] = useState([])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
@@ -62,37 +71,11 @@ const App = () => {
     return false
   }
 
-  /*const addBlog = (blogOject) => {
-    blogFormRef.current.toggleVisibility()
-    blogService
-      .create(blogOject)
-      .then(returnedBlog => {
-        setBlogs(blogs.concat(returnedBlog))
-        dispatch(notificationChange(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`, 5))
-      })
-  }*/
-
   const addBlog = (blogOject) => {
     blogFormRef.current.toggleVisibility()
     dispatch(createBlog(blogOject))
     dispatch(notificationChange(`a new blog ${blogOject.title} by ${blogOject.author} added`, 5))
   }
-
-  /*const updateBlog = (blogObject) => {
-    blogService
-      .update(blogObject.id, blogObject)
-      .then(setBlogs(previousBlogs => previousBlogs.map(blog => blog.id === blogObject.id ? blogObject : blog)))
-  }
-
-  const addLike = (id) => {
-    const blog = blogs.find((b) => b.id === id)
-    const likedBlog = { ...blog, likes: ++blog.likes }
-    blogService
-      .update(id, likedBlog)
-      .then((returnedBlog) => {
-        setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
-      })
-  }*/
 
   const updateBlog = (blogObject) => {
     dispatch(giveLike(blogObject.id, blogObject, blogObject.likes))
@@ -144,24 +127,32 @@ const App = () => {
     )
   }
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-
-      <p>
-        {user.name} logged in
-        <button id="logout-button" onClick={handleLogout}>logout</button>
-      </p>
-
+    <Router>
       <div>
-        {blogForm()}
-      </div>
+        <h2>blogs</h2>
+        <Notification />
+        <p>
+          {user.name} logged in
+          <button id="logout-button" onClick={handleLogout}>logout</button>
+        </p>
+        <Switch>
+          <Route path='/users'>
+            <Users userArray={users} />
+          </Route>
+          <Route path='/'>
 
-      {blogsByLikes(blogs)}
-      {blogs.map(blog =>
-        <Blog addLike={updateBlog} key={blog.id} blog={blog} />
-      )}
-    </div>
+            <div>
+              {blogForm()}
+            </div>
+
+            {blogsByLikes(blogs)}
+            {blogs.map(blog =>
+              <Blog addLike={updateBlog} key={blog.id} blog={blog} />
+            )}
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
