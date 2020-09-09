@@ -2,8 +2,13 @@ import React from 'react'
 //import { deleteBlog } from '../reducers/blogReducer'
 //import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blogList }) => {
+  console.log('blogs: ', blogList)
+  if (!blogList) {
+    return null
+  }
   //const dispatch = useDispatch()
   //const [fullView, setFullView] = useState(false)
 
@@ -50,9 +55,27 @@ const Blog = ({ blog }) => {
   }*/
 
   //if (fullView === false) {
+  /******************return (
+    <div>
+      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author} </Link>
+    </div>
+  )*************************************/
+
   return (
     <div>
-      <Link to={`/blogs/${blog.id}`}>{blog.title} {blog.author} </Link> {/*<button id="view-button" data-testid="view-button" onClick={handleFullViewChange}>view</button>*/}
+      <Table striped>
+        <tbody>
+          {blogList.map(b =>
+            <tr key={b.id}>
+              <td>
+                <Link to={`/blogs/${b.id}`}>{b.title}</Link>
+              </td>
+              <td>
+                {b.author}
+              </td>
+            </tr>)}
+        </tbody>
+      </Table>
     </div>
   )
 

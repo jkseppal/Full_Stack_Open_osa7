@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import blogService from '../services/blogs'
+import { Form, Button } from 'react-bootstrap'
 
 const SingleBlog = ({ blogList, addLike }) => {
   const [content, setContent] = useState('')
@@ -43,18 +44,18 @@ const SingleBlog = ({ blogList, addLike }) => {
       <h2>{blogToShow.title} by {blogToShow.author}</h2>
       <div>
         <a href={blogToShow.url}>{blogToShow.url}</a><br />
-        {blogToShow.likes} likes <button onClick={handleLike}>like</button><br />
+        {blogToShow.likes} likes <Button variant="success" onClick={handleLike}>like</Button><br />
         added by {blogToShow.user.name}
       </div>
       <div>
         <h4>comments</h4>
         <div>
-          <form onSubmit={addComment}>
+          <Form onSubmit={addComment}>
             <div>
-              <input value={content} onChange={handleContentChange} />
-              <button type="submit">add comment</button>
+              <Form.Control value={content} onChange={handleContentChange} />
+              <Button variant="primary" type="submit">add comment</Button>
             </div>
-          </form>
+          </Form>
         </div>
         <ul>
           {blogToShow.comments.map(c =>

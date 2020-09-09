@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const Users = ({ userArray }) => {
   console.log('users: ', userArray)
@@ -11,7 +12,7 @@ const Users = ({ userArray }) => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
+      <Table striped>
         <thead>
           <tr>
             <th>user</th>
@@ -26,7 +27,7 @@ const Users = ({ userArray }) => {
             </tr>
           )}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

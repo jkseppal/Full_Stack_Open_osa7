@@ -13,6 +13,7 @@ import { notificationChange } from './reducers/notificationReducer'
 import { initializeBlogs, giveLike, createBlog } from './reducers/blogReducer'
 import { initializeUsers } from './reducers/usersReducer'
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
+import { Form, Button, Navbar, Nav } from 'react-bootstrap'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -99,45 +100,63 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
+      <div className="container">
         <h2>log in to application</h2>
         <Error message={errorMessage} />
-        <form onSubmit={handleLogin}>
-          <div>
-            username
-            <input
-              id='username'
-              type="text"
-              value={username}
-              name="Username"
-              onChange={({ target }) => setUsername(target.value)}
-            />
-          </div>
-          <div>
-            password
-            <input
-              id='password'
-              type="password"
-              value={password}
-              name="Password"
-              onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button id="login-button" type="submit">login</button>
-        </form>
+        <Form onSubmit={handleLogin}>
+          <table>
+            <tbody>
+              <tr>
+                <td><Form.Label>username</Form.Label></td>
+                <td>
+                  <Form.Control
+                    id='username'
+                    type="text"
+                    value={username}
+                    name="Username"
+                    onChange={({ target }) => setUsername(target.value)}
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td><Form.Label>password</Form.Label></td>
+                <td>
+                  <Form.Control
+                    id='password'
+                    type="password"
+                    value={password}
+                    name="Password"
+                    onChange={({ target }) => setPassword(target.value)}
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <Button variant="primary" id="login-button" type="submit">login</Button>
+        </Form>
       </div>
     )
   }
   return (
     <Router>
-      <div>
-        <Link to={'/'}>blogs</Link> <Link to={'/users'}>users</Link> {user.name} logged in <button onClick={handleLogout}>logout</button>
-        <h2>blog app</h2>
+      <div className="container">
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="#" as="span">
+                <Link to={'/'}>blogs</Link>
+              </Nav.Link>
+              <Nav.Link href="#" as="span">
+                <Link to={'/users'}>users</Link>
+              </Nav.Link>
+              <Navbar.Brand>{user.name} logged in</Navbar.Brand>
+              <Button variant="secondary" onClick={handleLogout}>logout</Button>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <h1>blog app</h1>
         <Notification />
-        {/*<p>
-          {user.name} logged in
-          <button id="logout-button" onClick={handleLogout}>logout</button>
-        </p>*/}
         <Switch>
           <Route path='/users/:id'>
             <User userArray={users}></User>
@@ -153,11 +172,11 @@ const App = () => {
             <div>
               {blogForm()}
             </div>
-
             {blogsByLikes(blogs)}
-            {blogs.map(blog =>
+            {/*blogs.map(blog =>
               <Blog addLike={updateBlog} key={blog.id} blog={blog} />
-            )}
+            )*/}
+            <Blog blogList={blogs} />
           </Route>
         </Switch>
       </div>

@@ -1,5 +1,7 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
 
 const User = ({ userArray }) => {
   const id = useParams().id
@@ -11,14 +13,18 @@ const User = ({ userArray }) => {
   return (
     <div>
       <h2>{userToShow.name}</h2>
-      <h3>added blogs</h3>
-      {userToShow.blogs.map(blog =>
-        <div key={blog.id}>
-          <div>
-            {blog.title}
-          </div>
-        </div>
-      )}
+      <Table striped>
+        <thead><h4>added blogs</h4></thead>
+        <tbody>
+          {userToShow.blogs.map(blog =>
+            <tr key={blog.id}>
+              <td>
+                <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
     </div>
   )
 }
