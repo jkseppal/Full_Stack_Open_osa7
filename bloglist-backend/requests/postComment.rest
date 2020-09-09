@@ -1,0 +1,6 @@
+POST http://localhost:3001/api/blogs/5f2b9b5c07b7ff25084599ae/comments
+Content-Type: application/json
+
+{
+  "content": "Nyt on kyllä oikea mies kertomassa asiasta"
+}

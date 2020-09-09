@@ -83,6 +83,14 @@ blogsRouter.put('/:id', async (request, response) => {
   response.json(savedBlog.toJSON())
 })
 
+blogsRouter.post('/:id/comments', async (request, response) =>{
+  const blog = await Blog.findById(request.params.id)
+  const comment = request.body.content
+  blog.comments = blog.comments.concat(comment)
+  await blog.save()
+  response.json(blog.toJSON())
+})
+
 /*const blog = new Blog({
     title: 'Uppopumppu kautta aikain',
     author: 'SPG',
